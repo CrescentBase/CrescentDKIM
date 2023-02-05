@@ -54,7 +54,7 @@ async function HMUAincorrect(cir) {
     console.time("Generating witness");
     const witness = await cir.calculateWitness({ "HMUA": HMUA,"bh":bh, "base": base, 
                                                  "fromPlusSalt":fromPlusSalt,"msg":msg,
-                                                 "fromPlusSaltLen": fromPlusSaltLen, "msgLen":msgLen }, true);
+                                                 "fromPlusSaltLen": fromPlusSaltLen, "msgLen":msgLen }, true);                                            
     console.timeEnd("Generating witness");
 }
 
@@ -77,11 +77,17 @@ async function correctTest(cir) {
 
     const bh = msgToBits("8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92");
     assert(bh.length == BH_LEN, "Illegal bhBits length");
+    console.log("hahahh============", HMUA+bh+base);
+
+    const input = { "HMUA": HMUA,"bh":bh, "base": base, 
+    "fromPlusSalt":fromPlusSalt,"msg":msg,
+    "fromPlusSaltLen": fromPlusSaltLen, "msgLen":msgLen };
+
     console.time("Generating witness");
-    const witness = await cir.calculateWitness({ "HMUA": HMUA,"bh":bh, "base": base, 
-                                                 "fromPlusSalt":fromPlusSalt,"msg":msg,
-                                                 "fromPlusSaltLen": fromPlusSaltLen, "msgLen":msgLen }, true);
+    const witness = await cir.calculateWitness(input, true);
     console.timeEnd("Generating witness");
+    
+    saveWitnessToLocal(input);
 }
 
 async function baseIncorrect(cir) {
@@ -109,6 +115,12 @@ async function baseIncorrect(cir) {
     console.timeEnd("Generating witness");
 }
 
+async function saveWitnessToLocal(input){
+    const buff= await cir.witnessCalculator.calculateWTNSBin(input,0);
+	fs.writeFile(path.join("../build_circuits/" + "witness.wtns"), buff, function(err) {
+	    if (err) throw err;
+	});
+}
 
 async function bhIncorrect(cir) {
     const BH_LEN = 64 * 8;

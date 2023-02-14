@@ -1,15 +1,7 @@
 pragma circom 2.0.3;
 
 include "../snark-jwt-verify/circomlib/circuits/bitify.circom";
-
-// Calculate power of x ^ y
-function pow(x, y) {
-    if (y == 0) {
-        return 1;
-    } else {
-        return x * pow(x, y - 1);
-    }
-}
+include "./utils.circom";
 
 template Sha256Pad(maxLen) {
     signal input in[maxLen];
@@ -39,7 +31,6 @@ template Sha256Pad(maxLen) {
             bits2Num[i].in[j] <== num2Bits.out[(7 - i) * 8 + j];
         }
         lengthBytes[i] = bits2Num[i].out;
-        log(lengthBytes[i]);
     }
 
 

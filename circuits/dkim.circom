@@ -80,7 +80,7 @@ template dkim(BlockSpace) {
     }
 
     // bh ∈ msg checker
-    component msgContainsBh = contains(BLOCK_LEN);
+    component msgContainsBh = Contains(BLOCK_LEN);
     msgContainsBh.in1_len <== msgLen;
     msgContainsBh.in2_len <== SHA256_LEN;
     for (var i = 0; i < BLOCK_LEN; i++) {
@@ -93,7 +93,7 @@ template dkim(BlockSpace) {
     }
 
     // from ∈ msg checker
-    component contains = contains(BLOCK_LEN);
+    component contains = Contains(BLOCK_LEN);
     contains.in1_len <== msgLen;
     contains.in2_len <== fromLen;
     for (var i = 0; i < BLOCK_LEN; i++) {

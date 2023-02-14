@@ -76,11 +76,27 @@ function sha256Pad(prepad, maxBytes) {
     return [prepad, messageLen];
   }
 
+function strToBytes(str, fill = 0) {
+    const buf = Buffer.from(str);
+    const arr = [];
+    for (let i = 0; i < buf.length; i++) {
+        arr.push(buf[i]);
+    }
+    const fillSpace = fill - buf.length;
+    if (fillSpace > 0) {
+        for (let i = 0;i < fillSpace; i++) {
+            arr.push(0);
+        }
+    }
+    return arr;
+}
+
 module.exports = {
     bufferToBitArray,
     bitArrayToBuffer,
     arrayChunk,
     padMessage,
     sha256Pad,
-    int64toBytes
+    int64toBytes,
+    strToBytes
 }

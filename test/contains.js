@@ -5,7 +5,7 @@ const crypto = require("crypto");
 const wasm_tester = require("./tester.js");
 const assert = chai.assert;
 
-const {bufferToBitArray, bitArrayToBuffer} = require("./helpers/utils");
+const {bufferToBitArray, bitArrayToBuffer, strToBytes} = require("./helpers/utils");
 
 function msgToBitsSHA(msg, blocks) {
     let inn = bufferToBitArray(Buffer.from(msg));
@@ -36,36 +36,34 @@ async function compile() {
 
 
 async function anotherTest(cir) {
+    const MAX_LEN = 1024;     // in1 and in2 max_len 1024 byte
 
-    const MSG_LEN = 8192;        // msg max_len = 1024 words, so after sha = 1024 * 8 = 8192
-    const BH_LEN = 512;     // bh should be a 64bytes string, so bhLen = 64 * 8 = 512
+    var preimageMsg = "090b235e9eb8f197f2dd927937222c570396d971222d9009a9189e2b6cc0a2c1wawqwerqwer";
+    var msgBytes = strToBytes(preimageMsg, MAX_LEN);
+    assert(msgBytes.length == MAX_LEN, "Illegal msg length");
 
-    var msgBits = msgToBitsSHA("090b235e9eb8f197f2dd927937222c570396d971222d9009a9189e2b6cc0a2c1wawqwerqwer",16);
-    assert(msgBits.length == MSG_LEN, "Illegal msg length");
-
-    
-    var bhBits = msgToBits("090b235e9eb8f197f2dd927937222c570396d971222d9009a9189e2b6cc0a2c1"); // len of bh=sha256(can-body) is 256 but this is comparison of string so *8
-    assert(bhBits.length == BH_LEN, "Illegal bhBits length");
+    var proimageBh = "090b235e9eb8f197f2dd927937222c570396d971222d9009a9189e2b6cc0a2c1";
+    var bhBytes = strToBytes(proimageBh, MAX_LEN); // len of bh=sha256(can-body) is 256
+    assert(bhBytes.length == MAX_LEN, "Illegal bhBits length");
 
     console.time("Generating witness");
-    const witness = await cir.calculateWitness({ "bh":bhBits, "msg":msgBits }, true);
+    const witness = await cir.calculateWitness({ "in1":msgBytes, "in2":bhBytes, "in1_len":preimageMsg.length, "in2_len":proimageBh.length }, true);
     console.timeEnd("Generating witness");
 }
 
 async function wrongTest(cir) {
-    const MSG_LEN = 8192;        // msg max_len = 1024 words, so after sha = 1024 * 8 = 8192
-    const BH_LEN = 512;     // bh should be a 64bytes string, so bhLen = 64 * 8 = 512
+    const MAX_LEN = 1024;     // in1 and in2 max_len 1024 byte
 
-    var msgBits = msgToBitsSHA("190b235e9eb8f197f2dd927937222c570396d971222d9009a9189e2b6cc0a2c1wawqwerqwer",16);
-    assert(msgBits.length == MSG_LEN, "Illegal msg length");
+    var preimageMsg = "190b235e9eb8f197f2dd927937222c570396d971222d9009a9189e2b6cc0a2c1wawqwerqwer";
+    var msgBytes = strToBytes(preimageMsg, MAX_LEN);
+    assert(msgBytes.length == MAX_LEN, "Illegal msg length");
 
-    
-    var bhBits = msgToBits("090b235e9eb8f197f2dd927937222c570396d971222d9009a9189e2b6cc0a2c1"); // len of bh=sha256(can-body) is 256 but this is comparison of string so *8
-    assert(bhBits.length == BH_LEN, "Illegal bhBits length");
+    var proimageBh = "090b235e9eb8f197f2dd927937222c570396d971222d9009a9189e2b6cc0a2c1";
+    var bhBytes = strToBytes(proimageBh, MAX_LEN); // len of bh=sha256(can-body) is 256
+    assert(bhBytes.length == MAX_LEN, "Illegal bhBits length");
 
     console.time("Generating witness");
-    const witness = await cir.calculateWitness({ "bh":bhBits, "msg":msgBits }, true);
-            
+    const witness = await cir.calculateWitness({ "in1":msgBytes, "in2":bhBytes, "in1_len":preimageMsg.length, "in2_len":proimageBh.length }, true);
     console.timeEnd("Generating witness");
 }
 

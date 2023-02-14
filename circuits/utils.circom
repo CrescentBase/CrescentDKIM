@@ -56,3 +56,12 @@ template calculateTotal(n) {
 
     sum <== sums[n - 1];
 }
+
+// Calculate power of x ^ y
+function pow(x, y) {
+    if (y == 0) {
+        return 1;
+    } else {
+        return x * pow(x, y - 1);
+    }
+}

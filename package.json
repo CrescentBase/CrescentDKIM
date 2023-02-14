@@ -7,7 +7,8 @@
   "author": "BenLaw <dysquare@foxmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "cd ./test && mocha ./dkim.js"
+    "test": "cd ./test && mocha ./dkim.js",
+    "testContains": "cd ./test && mocha ./contains.js"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.2",

@@ -1,7 +1,7 @@
 pragma circom 2.0.3;
 
 
-template contains(maxLen) {
+template Contains(maxLen) {
     signal input in1[maxLen];
     signal input in2[maxLen];
 
@@ -24,10 +24,6 @@ template contains(maxLen) {
     signal counterSignal;
     counterSignal <-- counter_max;
 
-    log(counterSignal);
-    log(in2_len);
     counterSignal === in2_len;
     
 }
-
-// component main = contains(8192, 2048);

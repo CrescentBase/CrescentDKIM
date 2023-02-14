@@ -37,9 +37,50 @@ function padMessage(bits) {
     return bits;
 }
 
+function int8toBytes(num) {
+    let arr = new ArrayBuffer(1);
+    let view = new DataView(arr);
+    view.setUint8(0, num);
+    return new Uint8Array(arr);
+}
+
+function int64toBytes(num) {
+    let arr = new ArrayBuffer(8);
+    let view = new DataView(arr);
+    view.setInt32(4, num, false);
+    return new Uint8Array(arr);
+}
+  
+function mergeUInt8Arrays(a1, a2) {
+    var mergedArray = new Uint8Array(a1.length + a2.length);
+    mergedArray.set(a1);
+    mergedArray.set(a2, a1.length);
+    return mergedArray;
+}
+
+
+function sha256Pad(prepad, maxBytes) {
+
+    let length_bits = prepad.length * 8;
+    let length_bytes = int64toBytes(length_bits);
+    prepad = mergeUInt8Arrays(prepad, int8toBytes(2 ** 7));
+    while ((prepad.length * 8 + length_bytes.length * 8) % 512 !== 0) {
+      prepad = mergeUInt8Arrays(prepad, int8toBytes(0));
+    }
+    prepad = mergeUInt8Arrays(prepad, length_bytes);
+    let messageLen = prepad.length;
+    while (prepad.length < maxBytes) {
+      prepad = mergeUInt8Arrays(prepad, int64toBytes(0));
+    }
+  
+    return [prepad, messageLen];
+  }
+
 module.exports = {
     bufferToBitArray,
     bitArrayToBuffer,
     arrayChunk,
     padMessage,
+    sha256Pad,
+    int64toBytes
 }

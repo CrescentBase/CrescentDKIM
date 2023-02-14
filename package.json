@@ -6,6 +6,9 @@
   "repository": "",
   "author": "BenLaw <dysquare@foxmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "cd ./test && mocha ./dkim.js"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.2.2",
     "@nomiclabs/hardhat-etherscan": "^3.1.5",

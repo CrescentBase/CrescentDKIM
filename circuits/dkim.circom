@@ -11,7 +11,7 @@ template dkim(BlockSpace) {
     // constant
     var BLOCK_LEN = 1024;
     var SHA256_LEN = 32;
-    var BH_LEN = 64;
+    var BH_LEN = 44;
     
     // public statments
     signal input HMUA[SHA256_LEN]; // Hidden Mail User Agent = sha256(fromPlusSalt)

@@ -102,7 +102,7 @@ template dkim(BYTE_SIZE) {
     }
 }
 
-component main  {public [HMUA]}= dkim(8);
+component main  {public [HMUA, bh, base]}= dkim(8);
 
 
 

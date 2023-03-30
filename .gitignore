@@ -25,3 +25,7 @@ typechain
 #Hardhat files
 cache
 artifacts
+
+snarkjs_example
+
+package-lock.json

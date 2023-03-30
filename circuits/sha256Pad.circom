@@ -10,11 +10,11 @@ template Sha256Pad(maxLen) {
     signal output prepadOut[maxLen];
     signal output prepadLen;
 
-    var tempLen = (in_len + 8) % 64;
+    var tempLen = (in_len + 1 + 8) % 64;
     if (tempLen == 0) {
-        tempLen = in_len + 8;
+        tempLen = in_len + 1 + 8;
     } else {
-        tempLen = (in_len + 8) + (64 - tempLen);
+        tempLen = (in_len + 1 + 8) + (64 - tempLen);
     }
 
     component ie1[maxLen];

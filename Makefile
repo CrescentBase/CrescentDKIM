@@ -20,4 +20,7 @@ init:
 	pip3 install aiodns
 	pip3 install PyNaCl
 
+asdf:
+	cd ./build_circuits/dkim_js && node ./generate_witness.js dkim.wasm ../input.json ../witness.wtns
+
 
